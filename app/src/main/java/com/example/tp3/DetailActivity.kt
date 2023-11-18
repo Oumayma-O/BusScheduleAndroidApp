@@ -1,21 +1,21 @@
-package com.example.tp3;
+package com.example.tp3
+
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import com.example.tp3.viewmodels.BusScheduleViewModel
+import com.example.tp3.viewmodels.BusScheduleViewModelFactory
 
 class DetailActivity : AppCompatActivity() {
 
     private lateinit var detailsAdapter: DetailsAdapter
+    private lateinit var viewModel: BusScheduleViewModel
 
-    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
@@ -28,17 +28,18 @@ class DetailActivity : AppCompatActivity() {
 
         toolBarTitle.text = stationName
 
-        GlobalScope.launch(Dispatchers.IO) {
-            val schedules = (application as BusScheduleApplication)
-                .database.scheduleDao()
-                .getByStopName(stationName)
+        viewModel = ViewModelProvider(
+            this,
+            BusScheduleViewModelFactory((application as BusScheduleApplication).database.scheduleDao())
+        ).get(BusScheduleViewModel::class.java)
 
-            launch(Dispatchers.Main) {
-                recyclerView.layoutManager = LinearLayoutManager(this@DetailActivity)
-                detailsAdapter = DetailsAdapter(schedules)
-                recyclerView.adapter = detailsAdapter
-            }
+        viewModel.scheduleForStopName(stationName).observe(this) { schedules ->
+            detailsAdapter.submitList(schedules)
         }
+
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        detailsAdapter = DetailsAdapter()
+        recyclerView.adapter = detailsAdapter
 
         backArrow.setOnClickListener {
             startActivity(Intent(this@DetailActivity, MainActivity::class.java))

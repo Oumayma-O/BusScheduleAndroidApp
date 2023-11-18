@@ -1,4 +1,4 @@
-package com.example.tp3;
+package com.example.tp3
 
 import android.content.Intent
 import android.os.Bundle
@@ -39,12 +39,10 @@ class MainActivity : AppCompatActivity() {
         }
         recyclerView.adapter = busStopAdapter
 
-        lifecycleScope.launch(Dispatchers.IO) {
-            val schedules = viewModel.fullSchedule()
-
-            launch(Dispatchers.Main) {
-                busStopAdapter.updateList(schedules)
-            }
+        // Observe LiveData in the ViewModel
+        viewModel.fullSchedule().observe(this) { schedules ->
+            // Update the adapter with the new data
+            busStopAdapter.updateList(schedules)
         }
     }
 
