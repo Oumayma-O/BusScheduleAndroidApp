@@ -5,5 +5,16 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
-    <style name="Theme.TP3" parent="Base.Theme.TP3" />
+    <style name="Theme.TP3" parent="Base.Theme.TP3">
+        <!-- Additional customizations if any -->
+    </style>
+
+
+    <style name="MainTheme" parent="Base.Theme.TP3">
+        <item name="android:statusBarColor">@color/MainStatusBarColor</item>
+    </style>
+
+    <style name="DetailTheme" parent="Base.Theme.TP3">
+        <item name="android:statusBarColor">@color/MainStatusBarColor</item>
+    </style>
 </resources>

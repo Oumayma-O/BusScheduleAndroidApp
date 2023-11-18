@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tp3.database.entities.Schedule
 
-class DetailsAdapter(private val scheduleList: List<Schedule>) :
+class DetailsAdapter(private var scheduleList: List<Schedule>) :
     RecyclerView.Adapter<DetailsAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -31,6 +31,7 @@ class DetailsAdapter(private val scheduleList: List<Schedule>) :
     override fun getItemCount(): Int {
         return scheduleList.size
     }
+
 
 
 }

@@ -26,7 +26,6 @@ class MainActivity : AppCompatActivity() {
             AppDatabase.getDatabase(this)
         }
 
-        // Initialize ViewModel using ViewModelProvider and ViewModelFactory
         viewModel = ViewModelProvider(
             this,
             BusScheduleViewModelFactory((application as BusScheduleApplication).database.scheduleDao())
@@ -34,22 +33,16 @@ class MainActivity : AppCompatActivity() {
 
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
 
-        // Configure RecyclerView and Adapter
         recyclerView.layoutManager = LinearLayoutManager(this)
         busStopAdapter = BusStopAdapter { schedule ->
-            // Start DetailsActivity on item click
             startDetailsActivity(schedule.stopName)
         }
         recyclerView.adapter = busStopAdapter
 
-        // Use coroutines to fetch data from the database in a background thread
         lifecycleScope.launch(Dispatchers.IO) {
-            // Get the list of schedules from the ViewModel
             val schedules = viewModel.fullSchedule()
 
-            // Switch to the main thread to update the UI
             launch(Dispatchers.Main) {
-                // Update the adapter with the fetched data
                 busStopAdapter.updateList(schedules)
             }
         }

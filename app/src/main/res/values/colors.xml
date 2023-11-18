@@ -2,4 +2,9 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="MainStatusBarColor">#FF9800</color>
+    <color name="DetailStatusBarColor">#FF9800</color>
+    <color name="ToolBarColor">#FF9800</color>
+
+
 </resources>
