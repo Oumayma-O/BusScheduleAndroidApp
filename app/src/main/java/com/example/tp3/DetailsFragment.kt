@@ -1,5 +1,5 @@
 package com.example.tp3
-// DetailFragment.kt
+// DetailsFragment.kt
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tp3.viewmodels.BusScheduleViewModel
 import com.example.tp3.viewmodels.BusScheduleViewModelFactory
 
-class DetailFragment : Fragment() {
+class DetailsFragment : Fragment() {
 
     private lateinit var detailsAdapter: DetailsAdapter
     private lateinit var viewModel: BusScheduleViewModel

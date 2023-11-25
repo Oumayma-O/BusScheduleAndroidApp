@@ -1,54 +1,48 @@
 package com.example.tp3
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.commit
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.tp3.database.AppDatabase
 import com.example.tp3.viewmodels.BusScheduleViewModel
 import com.example.tp3.viewmodels.BusScheduleViewModelFactory
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var busStopAdapter: BusStopAdapter
     private lateinit var viewModel: BusScheduleViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val appDatabase: AppDatabase by lazy {
-            AppDatabase.getDatabase(this)
-        }
-
+        // ViewModel initialization remains the same
         viewModel = ViewModelProvider(
             this,
             BusScheduleViewModelFactory((application as BusScheduleApplication).database.scheduleDao())
         ).get(BusScheduleViewModel::class.java)
 
-        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
-
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        busStopAdapter = BusStopAdapter { schedule ->
-            startDetailsActivity(schedule.stopName)
-        }
-        recyclerView.adapter = busStopAdapter
-
-        // Observe LiveData in the ViewModel
-        viewModel.fullSchedule().observe(this) { schedules ->
-            // Update the adapter with the new data
-            busStopAdapter.updateList(schedules)
+        // Add the BusScheduleFragment to the container
+        if (savedInstanceState == null) {
+            supportFragmentManager.commit {
+                replace(R.id.nav_host_fragment, BusScheduleFragment())
+            }
         }
     }
 
-    private fun startDetailsActivity(stationName: String) {
-        val intent = Intent(this, DetailActivity::class.java)
-        intent.putExtra(DetailActivity.EXTRA_STATION_NAME, stationName)
-        startActivity(intent)
+    fun openDetailFragment(stationName: String) {
+        // Navigate to the DetailFragment with the station name
+        supportFragmentManager.commit {
+            replace(R.id.nav_host_fragment, DetailsFragment().apply {
+                arguments = Bundle().apply {
+                    putString(DetailsFragment.EXTRA_STATION_NAME, stationName)
+                }
+            })
+            addToBackStack(null)
+        }
+    }
+
+    fun openBusScheduleFragment() {
+        // Navigate back to the BusScheduleFragment
+        supportFragmentManager.popBackStack()
     }
 }

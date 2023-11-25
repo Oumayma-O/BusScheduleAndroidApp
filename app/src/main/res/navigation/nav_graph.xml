@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             android:id="@+id/nav_graph.xml">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph.xml"
+    android:label="action_bus_schedule_to_details"
+    app:startDestination="@id/busScheduleFragment">
 
+    <fragment
+        android:id="@+id/busScheduleFragment"
+        android:name="com.example.tp3.BusScheduleFragment"
+        android:label="fragment_bus_schedule"
+        tools:layout="@layout/fragment_bus_schedule">
+        <action
+            android:id="@+id/action_busScheduleFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.example.tp3.DetailsFragment"
+        android:label="DetailsFragment" >
+        <argument
+            android:name="stationName"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_detailsFragment_to_busScheduleFragment"
+            app:destination="@id/busScheduleFragment" />
+    </fragment>
 </navigation>
